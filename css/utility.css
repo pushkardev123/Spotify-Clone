@@ -1,0 +1,35 @@
+.flex{
+    display: flex;
+}
+
+.justify-content{
+    justify-content: center;
+}
+
+.align-items{
+    align-items: center;
+}
+
+.rounded{
+    border-radius: 5%;
+}
+.bg-grey{
+    background-color: rgb(18,18,18);
+}
+/* Custom scrollbar for WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 12px; /* width of the entire scrollbar */
+    background: #2f2f2f; /* background color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #555; /* color of the scrollbar thumb */
+    border-radius: 10px; /* roundness of the scrollbar thumb */
+    border: 3px solid #2f2f2f; /* creates padding around the thumb */
+}
+
+/* Custom scrollbar for Firefox */
+body, .content {
+    scrollbar-color: #555 #2f2f2f; /* thumb color track color */
+    scrollbar-width: thin; /* thickness of the scrollbar */
+}
