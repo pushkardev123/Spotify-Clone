@@ -33,7 +33,7 @@ let currentSong = new Audio();
 
 const playMusic = async (songName) => {
     console.log(currentPlaylist);
-    currentSong.src = `songs/${currentPlaylist}/${songName}`;
+    currentSong.src = `songs/${currentPlaylist}/${songName}.mp3`;
     currentSong.play();
     play.src = "pause.svg";
 }
