@@ -1,6 +1,6 @@
 async function getSongs(folder) {
     currentPlaylist = folder;
-    let a = await fetch(`http://192.168.0.119:3000/Spotify-Clone/songs/${folder}`);
+    let a = await fetch(`./songs/${folder}`);
     let b = await a.text();
     let div = document.createElement("div");
     div.innerHTML = b;
@@ -38,7 +38,7 @@ const playMusic = async (songName) => {
 }
 
 async function loadPlaylists(){
-    let a = await fetch(`http://192.168.0.119:3000/Spotify-Clone/songs/`);
+    let a = await fetch(`./songs/`);
     let b = await a.text();
     let div=document.createElement("div");
     div.innerHTML=b;
@@ -47,7 +47,7 @@ async function loadPlaylists(){
         if(e.href.includes("/songs")){
             let folder=e.href.split("/").slice(-2)[0].replaceAll("%20"," ");
             console.log(folder);
-            let c= await fetch(`http://192.168.0.119:3000/Spotify-Clone/songs/${folder}/info.json`);
+            let c= await fetch(`./songs/${folder}/info.json`);
             let d=await c.json();
             let playlist=document.querySelector(".cardContainer");
             playlist.innerHTML+=`<div class="card rounded" data-folder="${folder}">
