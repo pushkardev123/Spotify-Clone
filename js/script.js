@@ -1,64 +1,81 @@
 async function getSongs(folder) {
     currentPlaylist = folder;
-    let a = await fetch(`./songs/${folder}`);
-    let b = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = b;
-    as = div.getElementsByTagName("a");
-    let songs = [];
-    for (let i = 0; i < as.length; i++) {
-        songs.push(as[i].innerHTML);
+    try {
+        let response = await fetch(`./songs/${folder}/index.html`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        let text = await response.text();
+        let div = document.createElement("div");
+        div.innerHTML = text;
+        let as = div.getElementsByTagName("a");
+        let songs = [];
+        for (let i = 0; i < as.length; i++) {
+            songs.push(as[i].innerHTML);
+        }
+        return songs;
+    } catch (error) {
+        console.error('Error fetching songs:', error);
+        return [];
     }
-    return songs;
 }
+
 var currentPlaylist;
+
 function formatTime(seconds) {
-    // Round the seconds to the nearest integer
     const totalSeconds = Math.floor(seconds);
-
-    // Calculate the number of minutes
     const minutes = Math.floor(totalSeconds / 60);
-
-    // Calculate the remaining seconds
     const remainingSeconds = totalSeconds % 60;
-
-    // Pad minutes and seconds with leading zeros if needed
     const paddedMinutes = String(minutes).padStart(2, '0');
     const paddedSeconds = String(remainingSeconds).padStart(2, '0');
-
-    // Combine minutes and seconds into the final format
     return `${paddedMinutes}:${paddedSeconds}`;
 }
+
 let currentSong = new Audio();
+
 const playMusic = async (songName) => {
     console.log(currentPlaylist);
-    currentSong.src = "songs/" + currentPlaylist + "/" + songName+".mp3";
+    currentSong.src = `songs/${currentPlaylist}/${songName}.mp3`;
     currentSong.play();
     play.src = "pause.svg";
 }
 
-async function loadPlaylists(){
-    let a = await fetch(`./songs/`);
-    let b = await a.text();
-    let div=document.createElement("div");
-    div.innerHTML=b;
-    let as=div.getElementsByTagName("a");
-    Array.from(as).forEach(async e=>{
-        if(e.href.includes("/songs")){
-            let folder=e.href.split("/").slice(-2)[0].replaceAll("%20"," ");
-            console.log(folder);
-            let c= await fetch(`./songs/${folder}/info.json`);
-            let d=await c.json();
-            let playlist=document.querySelector(".cardContainer");
-            playlist.innerHTML+=`<div class="card rounded" data-folder="${folder}">
-                        <img class="rounded" src="songs/${folder}/cover.jpeg" alt="">
-                        <h4>${d.title}</h4>
-                        <p>${d.description}</p>
-                    </div>`;
-                    console.log(`Spotify-Clone/songs/${folder}/cover.jpeg`);
+async function loadPlaylists() {
+    try {
+        let response = await fetch(`./songs/`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-    });
-
+        let text = await response.text();
+        let div = document.createElement("div");
+        div.innerHTML = text;
+        let as = div.getElementsByTagName("a");
+        Array.from(as).forEach(async (e) => {
+            if (e.href.includes("/songs")) {
+                let folder = e.href.split("/").slice(-2)[0].replaceAll("%20", " ");
+                console.log(folder);
+                try {
+                    let response = await fetch(`./songs/${folder}/info.json`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    let info = await response.json();
+                    let playlist = document.querySelector(".cardContainer");
+                    playlist.innerHTML += `
+                        <div class="card rounded" data-folder="${folder}">
+                            <img class="rounded" src="songs/${folder}/cover.jpeg" alt="">
+                            <h4>${info.title}</h4>
+                            <p>${info.description}</p>
+                        </div>`;
+                    console.log(`Spotify-Clone/songs/${folder}/cover.jpeg`);
+                } catch (error) {
+                    console.error('Error fetching playlist info:', error);
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching playlists:', error);
+    }
 }
 async function main() {
 
