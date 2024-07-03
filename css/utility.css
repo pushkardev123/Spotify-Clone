@@ -1,3 +1,7 @@
+*{
+    margin: 0;
+    padding: 0;
+}
 .flex{
     display: flex;
 }
@@ -11,7 +15,7 @@
 }
 
 .rounded{
-    border-radius: 5%;
+    border-radius: 20px;
 }
 .bg-grey{
     background-color: rgb(18,18,18);
@@ -31,5 +35,25 @@
 /* Custom scrollbar for Firefox */
 body, .content {
     scrollbar-color: #555 #2f2f2f; /* thumb color track color */
-    scrollbar-width: thin; /* thickness of the scrollbar */
+    scrollbar-width:thin; /* thickness of the scrollbar */
+}
+
+@media (max-width: 1300px){
+    .left{
+        position: absolute;
+        left: -120%;
+        width: 400px;
+        z-index: 100;
+    } 
+    .left .close{
+        top: 5%;
+        left: 370px;
+    }  
+    .right{
+        width: 100vw;
+    }
+    .hamburger{
+        display: inline-block;
+    }
+    
 }
